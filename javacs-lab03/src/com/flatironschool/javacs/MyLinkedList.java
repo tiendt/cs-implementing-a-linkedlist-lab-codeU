@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.flatironschool.javacs;
 
@@ -15,17 +15,17 @@ import java.util.ListIterator;
  *
  */
 public class MyLinkedList<E> implements List<E> {
-	
+
 	/**
 	 * Node is identical to ListNode from the example, but parameterized with T
-	 * 
+	 *
 	 * @author downey
 	 *
 	 */
 	private class Node {
 		public E cargo;
 		public Node next;
-		
+
 		public Node() {
 			this.cargo = null;
 			this.next = null;
@@ -42,12 +42,12 @@ public class MyLinkedList<E> implements List<E> {
 			return "Node(" + cargo.toString() + ")";
 		}
 	}
-	
+
 	private int size;            // keeps track of the number of elements
 	private Node head;           // reference to the first node
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public MyLinkedList() {
 		head = null;
@@ -64,7 +64,7 @@ public class MyLinkedList<E> implements List<E> {
 		mll.add(2);
 		mll.add(3);
 		System.out.println(Arrays.toString(mll.toArray()) + " size = " + mll.size());
-		
+
 		mll.remove(new Integer(2));
 		System.out.println(Arrays.toString(mll.toArray()) + " size = " + mll.size());
 	}
@@ -86,6 +86,22 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public void add(int index, E element) {
 		// TODO: fill this in
+		Node newNode = new Node (element);
+
+		if (index == 0) {
+			newNode.next = head;
+			head = newNode;
+		}
+
+			Node temp = head;
+			for (int i = 1; i < index; i++){
+				temp = temp.next;
+			}
+			Node next = temp.next;
+
+			temp.next = newNode;
+			newNode.next = next;
+			size ++;
 	}
 
 	@Override
@@ -147,13 +163,20 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public int indexOf(Object target) {
 		// TODO: fill this in
+		Node temp = head;
+		for (int i = 0; i < size; i++){
+			if (equals (temp.cargo, target)) {
+				return i;
+			}
+			temp = temp.next;
+		}
 		return -1;
 	}
 
 	/** Checks whether an element of the array is the target.
-	 * 
+	 *
 	 * Handles the special case that the target is null.
-	 * 
+	 *
 	 * @param target
 	 * @param object
 	 */
@@ -202,13 +225,30 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public boolean remove(Object obj) {
 		// TODO: fill this in
-		return false;
+		int index = indexOf (obj);
+		if (index == -1) {
+			return false;
+		}
+		else {
+			remove (index);
+			return true;
+		}
 	}
 
 	@Override
 	public E remove(int index) {
 		// TODO: fill this in
-		return null;
+		E removed = get(index);
+
+		if (index == 0) {
+			head = head.next;
+		}
+		else {
+			Node temp = getNode(index-1);
+			temp.next = temp.next.next;
+		}
+		size --;
+		return removed;
 	}
 
 	@Override
@@ -269,6 +309,6 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public <T> T[] toArray(T[] a) {
-		throw new UnsupportedOperationException();		
+		throw new UnsupportedOperationException();
 	}
 }
